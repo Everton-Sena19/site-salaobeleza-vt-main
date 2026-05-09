@@ -1,0 +1,23 @@
+{
+  "name": "Studio de Beleza Novo Visual",
+  "short_name": "Novo Visual",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0B0B0D",
+  "theme_color": "#D6B25E",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
