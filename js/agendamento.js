@@ -36,6 +36,9 @@ export async function confirmarAgendamento(data, hora) {
       servicoValor: ag.servico?.valor ?? null,
       servicoTempoMin: ag.servico?.tempoMin ?? 30,
 
+      grupoOperacional:
+        ag.servico?.grupoOperacional || null,
+
       raclub: ag.raclub || { status: 'nao' },
       createdAt: serverTimestamp()
     };

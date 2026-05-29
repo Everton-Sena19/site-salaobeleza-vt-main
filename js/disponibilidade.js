@@ -3,7 +3,7 @@
 // ===============================
 import { db } from './firebase.js';
 import { state } from './state.js';
-import { hhmmToMin, gerarSlotsDoDia, intervalosConflitam } from './utils.js';
+import { hhmmToMin, gerarSlotsDoDia, intervalosConflitam, gruposPodemCoexistir } from './utils.js';
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export async function getReservasIntervalosByDate(colecao, ymd) {
@@ -25,7 +25,8 @@ export async function getReservasIntervalosByDate(colecao, ymd) {
 
     items.push({
       ini,
-      fim: ini + dur
+      fim: ini + dur,
+      grupoOperacional: row.grupoOperacional || null
     });
   });
 
@@ -90,17 +91,91 @@ export async function preencherHorasDisponiveis() {
       const ini = hhmmToMin(val);
       const fimSlot = ini + dur;
 
-      const ocupado = reservas.some(r => intervalosConflitam(ini, fimSlot, r.ini, r.fim));
+      const grupoAtual =
+        state.agendamento?.servico?.grupoOperacional;
+
+      const ocupado = reservas.some((r) => {
+
+        const conflitoHorario =
+          intervalosConflitam(
+            ini,
+            fimSlot,
+            r.ini,
+            r.fim
+          );
+
+        if (!conflitoHorario) {
+          return false;
+        }
+
+        const podeCoexistir =
+          gruposPodemCoexistir(
+            grupoAtual,
+            r.grupoOperacional
+          );
+
+        return !podeCoexistir;
+      });
       opt.disabled = ocupado;
 
       if (ocupado) {
+
+        opt.disabled = true;
+
         opt.classList.add('reservado');
+        opt.classList.remove('simultaneo');
+
       } else {
+
+        opt.disabled = false;
+
+        const possuiSimultaneo =
+          reservas.some((r) => {
+
+            const conflitoHorario =
+              intervalosConflitam(
+                ini,
+                fimSlot,
+                r.ini,
+                r.fim
+              );
+
+            if (!conflitoHorario) {
+              return false;
+            }
+
+            return gruposPodemCoexistir(
+              grupoAtual,
+              r.grupoOperacional
+            );
+
+          });
+
+        if (possuiSimultaneo) {
+
+          opt.classList.add('simultaneo');
+
+          opt.textContent =
+            `⚠ ${val} Atendimento simultâneo`;
+
+        } else {
+
+          opt.textContent = val;
+
+          opt.classList.remove('simultaneo');
+
+        }
+
         opt.classList.remove('reservado');
+
       }
     }
+
   } catch (e) {
+
     console.error('[DISPONIBILIDADE]', e);
+
     alert('Não foi possível consultar os horários.');
+
   }
 }
