@@ -957,41 +957,41 @@ function bindReagendaButtons() {
     carregarProfissionais(),
   ]);
 
- renderProfissionaisNoSite();
+  renderProfissionaisNoSite();
 
-if (ctx?.profissionalNome && agendamentoContexto?.nomeCliente) {
+  if (ctx?.profissionalNome && agendamentoContexto?.nomeCliente) {
 
-  setTimeout(() => {
+    setTimeout(() => {
 
-    abrirModalAgendamento();
+      abrirModalAgendamento();
 
-    if (agendamentoContexto.nomeCliente && nomeClienteInput) {
-      nomeClienteInput.value = agendamentoContexto.nomeCliente || '';
-    }
+      if (agendamentoContexto.nomeCliente && nomeClienteInput) {
+        nomeClienteInput.value = agendamentoContexto.nomeCliente || '';
+      }
 
-    if (agendamentoContexto.sobrenomeCliente && sobrenomeClienteInput) {
-      sobrenomeClienteInput.value = agendamentoContexto.sobrenomeCliente || '';
-    }
+      if (agendamentoContexto.sobrenomeCliente && sobrenomeClienteInput) {
+        sobrenomeClienteInput.value = agendamentoContexto.sobrenomeCliente || '';
+      }
 
-    if (agendamentoContexto.telefoneCliente && telefoneClienteInput) {
-      telefoneClienteInput.value = agendamentoContexto.telefoneCliente || '';
-    }
+      if (agendamentoContexto.telefoneCliente && telefoneClienteInput) {
+        telefoneClienteInput.value = agendamentoContexto.telefoneCliente || '';
+      }
 
-    if (agendamentoContexto.servico && servicoDisplay) {
-      servicoDisplay.value =
-        `${agendamentoContexto.servico.nome} — ${toBRL(agendamentoContexto.servico.valor)}`;
-    }
+      if (agendamentoContexto.servico && servicoDisplay) {
+        servicoDisplay.value =
+          `${agendamentoContexto.servico.nome} — ${toBRL(agendamentoContexto.servico.valor)}`;
+      }
 
-    if (agendamentoContexto.dataBR && dataInput) {
-      dataInput.value = agendamentoContexto.dataBR;
-    }
+      if (agendamentoContexto.dataBR && dataInput) {
+        dataInput.value = agendamentoContexto.dataBR;
+      }
 
-    if (agendamentoContexto.hora && horaSelect) {
-      horaSelect.value = agendamentoContexto.hora;
-    }
+      if (agendamentoContexto.hora && horaSelect) {
+        horaSelect.value = agendamentoContexto.hora;
+      }
 
-  }, 700);
-}
+    }, 700);
+  }
 
 })();
 
@@ -1434,19 +1434,23 @@ confirmarBtn?.addEventListener('click', async () => {
     }
 
     const mensagemWhatsApp = `
-    ✨ Novo agendamento recebido!
+    Olá! Tudo bem? 😊
 
-    👤 Cliente: ${nomeCompleto}
-    📞 Telefone: ${agendamentoContexto.telefoneCliente}
+    Acabei de realizar meu agendamento pelo site do Salão de Beleza Novo Visual e gostaria de confirmar meu horário.
 
     💇 Serviço: ${agendamentoContexto.servico?.nome || 'Não informado'}
 
     📅 Data: ${dataFormatadaBR}
     ⏰ Hora: ${hhmm}
 
-    ${isRaClub ? '💎 Cliente Clube de Beleza' : '🧾 Cliente do salão'}
+    👤 Cliente: ${nomeCompleto}
+    📞 Telefone: ${agendamentoContexto.telefoneCliente}
 
-    Studio de Beleza Novo Visual
+    ${isRaClub ? '💎 Sou membro do Clube de Beleza.' : ''}
+
+    Fico no aguardo da confirmação.
+
+    Muito obrigada! 🌷
     `.trim();
 
     const numeroProfissional = onlyDigits(ctx.wa || '');
