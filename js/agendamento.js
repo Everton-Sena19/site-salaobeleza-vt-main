@@ -18,7 +18,10 @@ export async function confirmarAgendamento(data, hora) {
   await runTransaction(db, async (tx) => {
     const snap = await tx.get(ref);
 
-    if (snap.exists()) {
+    if (
+      snap.exists() &&
+      snap.data()?.status !== "cancelado"
+    ) {
       throw new Error("Horário já reservado.");
     }
 

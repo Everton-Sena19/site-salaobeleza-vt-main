@@ -416,13 +416,31 @@ async function getReservasIntervalosByDate(colecao, ymd) {
 
   snap.forEach(d => {
     const row = d.data() || {};
+
+    if (row.status === "cancelado") {
+      return;
+    }
+
     const h = row.hora;
     if (!h) return;
 
-    const tempo = Number(row.servicoTempoMin ?? row.tempoMin ?? row.duracaoMin);
-    const dur = Number.isFinite(tempo) && tempo > 0 ? tempo : 30;
+    const tempo = Number(
+      row.servicoTempoMin ??
+      row.tempoMin ??
+      row.duracaoMin
+    );
+
+    const dur =
+      Number.isFinite(tempo) && tempo > 0
+        ? tempo
+        : 30;
+
     const ini = hhmmToMin(h);
-    items.push({ ini, fim: ini + dur });
+
+    items.push({
+      ini,
+      fim: ini + dur
+    });
   });
 
   return items;
@@ -1099,9 +1117,11 @@ async function preencherHorasDisponiveis() {
       if (!val) continue;
 
       const ini = hhmmToMin(val);
-      const fim = ini + dur;
 
-      const ocupado = reservas.some(r => intervalosConflitam(ini, fim, r.ini, r.fim));
+      const ocupado = reservas.some(
+        r => ini >= r.ini && ini < r.fim
+      );
+
       if (ocupado) {
         opt.disabled = true;
         opt.classList.add('reservado');
@@ -1356,21 +1376,60 @@ confirmarBtn?.addEventListener('click', async () => {
     const col = (ctx.colecao || '').trim();
     const ref = doc(db, col, toKey(data, hhmm));
 
-    const snap = await getDoc(ref);
+    const reservas = await getReservasIntervalosByDate(col, data);
 
-    if (snap.exists()) {
+    const inicioSelecionado = hhmmToMin(hhmm);
+    const fimSelecionado =
+      inicioSelecionado +
+      (Number(agendamentoContexto.servico?.tempoMin) || 30);
 
+    const conflitoDuracao = reservas.some((r) =>
+      intervalosConflitam(
+        inicioSelecionado,
+        fimSelecionado,
+        r.ini,
+        r.fim
+      )
+    );
+
+    if (conflitoDuracao) {
       confirmarBtn.disabled = false;
       confirmarBtn.textContent = originalText || "Agendar";
 
       showToast(
-        "Esse horário acabou de ser reservado. Escolha outro horário.",
+        `Este serviço necessita de ${Number(agendamentoContexto.servico?.tempoMin) || 30} minutos.
+
+    O horário seguinte já está reservado.
+
+    Escolha outro horário ou consulte a profissional sobre a possibilidade de encaixe.`,
         "warning"
       );
 
-      await preencherHorasDisponiveis();
-
       return;
+    }
+
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+
+      const reservaExistente = snap.data() || {};
+
+      if (reservaExistente.status !== "cancelado") {
+
+        confirmarBtn.disabled = false;
+        confirmarBtn.textContent = originalText || "Agendar";
+
+        showToast(
+          "Esse horário acabou de ser reservado. Escolha outro horário.",
+          "warning"
+        );
+
+        await preencherHorasDisponiveis();
+
+        return;
+
+      }
+
     }
 
     const isRaClub = agendamentoContexto?.raclub?.status === 'membro';
@@ -1448,9 +1507,6 @@ confirmarBtn?.addEventListener('click', async () => {
 
     ${isRaClub ? '💎 Sou membro do Clube de Beleza.' : ''}
 
-    Fico no aguardo da confirmação.
-
-    Muito obrigada! 🌷
     `.trim();
 
     const numeroProfissional = onlyDigits(ctx.wa || '');

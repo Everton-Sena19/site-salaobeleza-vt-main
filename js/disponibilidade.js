@@ -16,6 +16,19 @@ export async function getReservasIntervalosByDate(colecao, ymd) {
 
   snap.forEach((d) => {
     const row = d.data() || {};
+
+    console.log(
+      "[RESERVA]",
+      d.id,
+      row.status,
+      row.hora,
+      row.servicoTempoMin
+    );
+
+    if (row.status === "cancelado") {
+      return;
+    }
+
     const h = row.hora;
     if (!h) return;
 
@@ -29,6 +42,11 @@ export async function getReservasIntervalosByDate(colecao, ymd) {
       grupoOperacional: row.grupoOperacional || null
     });
   });
+
+  console.log(
+    "[ITENS FINAIS]",
+    items
+  );
 
   return items;
 }
