@@ -1914,3 +1914,64 @@ reaConfirmarBtn?.addEventListener('click', async () => {
     console.error('[Reagendar][resumo]', e);
   }
 });
+
+/* =========================================
+   INSTALAÇÃO PWA
+========================================= */
+
+let deferredPrompt;
+
+const bannerPWA =
+    document.getElementById("pwaInstallBanner");
+
+const btnInstalarPWA =
+    document.getElementById("btnInstalarPWA");
+
+const btnFecharPWA =
+    document.getElementById("btnFecharPWA");
+
+window.addEventListener(
+    "beforeinstallprompt",
+    (e) => {
+
+        e.preventDefault();
+
+        deferredPrompt = e;
+
+        bannerPWA?.classList.remove("hidden");
+    }
+);
+
+btnInstalarPWA?.addEventListener(
+    "click",
+    async () => {
+
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        bannerPWA?.classList.add("hidden");
+    }
+);
+
+btnFecharPWA?.addEventListener(
+    "click",
+    () => {
+
+        bannerPWA?.classList.add("hidden");
+    }
+);
+
+window.addEventListener(
+    "appinstalled",
+    () => {
+
+        bannerPWA?.classList.add("hidden");
+
+        console.log("PWA instalado");
+    }
+);

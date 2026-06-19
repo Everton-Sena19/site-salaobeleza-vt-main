@@ -281,22 +281,48 @@
         </div>
     </div>
 
+    <!-- Instalar App -->
+    <div id="pwaInstallBanner" class="pwa-install-banner hidden">
+
+        <div class="pwa-install-content">
+
+           <img src="./assets/logo-top.png">
+
+            <div class="pwa-install-text">
+                <strong>Novo Visual App</strong>
+                <span>
+                    Instale o aplicativo e tenha acesso rápido ao agendamento.
+                </span>
+            </div>
+
+            <button id="btnInstalarPWA" class="pwa-install-btn">
+                Instalar
+            </button>
+
+            <button id="btnFecharPWA" class="pwa-install-close">
+                ✕
+            </button>
+
+        </div>
+
+    </div>
+
     <script type="module" src="./js/script.js"></script>
     <script type="module" src="./js/servicos-site.js"></script>
 
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker
-            .register('./sw.js')
-            .then(() => {
-              console.log('Service Worker registrado com sucesso.');
-            })
-            .catch((error) => {
-              console.error('Erro ao registrar Service Worker:', error);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('./sw.js')
+                    .then(() => {
+                        console.log('Service Worker registrado com sucesso.');
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao registrar Service Worker:', error);
+                    });
             });
-        });
-      }
+        }
     </script>
 
 </body>
