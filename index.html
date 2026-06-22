@@ -204,8 +204,8 @@
             <div class="row-actions">
                 <button type="button" id="btnRAJaMembro" class="btn-secondary">Já faço parte</button>
                 <button type="button" id="btnRANao" class="btn-secondary">Agora não</button>
-                <a id="btnRAAssinar" class="btn-primary"
-                    href="https://wa.me/5548991060294" target="_blank" rel="noopener">
+                <a id="btnRAAssinar" class="btn-primary" href="https://wa.me/5548991060294" target="_blank"
+                    rel="noopener">
                     Quero assinar
                 </a>
             </div>
@@ -281,35 +281,6 @@
         </div>
     </div>
 
-    <!-- Instalar App -->
-    <div id="pwaInstallBanner" class="pwa-install-banner hidden">
-
-        <div class="pwa-install-content">
-
-           <img src="./assets/logo-top.png">
-
-            <div class="pwa-install-text">
-                <strong>Novo Visual App</strong>
-                <span>
-                    Instale o aplicativo e tenha acesso rápido ao agendamento.
-                </span>
-            </div>
-
-            <button id="btnInstalarPWA" class="pwa-install-btn">
-                Instalar
-            </button>
-
-            <button id="btnFecharPWA" class="pwa-install-close">
-                ✕
-            </button>
-
-        </div>
-
-    </div>
-
-    <script type="module" src="./js/script.js"></script>
-    <script type="module" src="./js/servicos-site.js"></script>
-
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -324,6 +295,79 @@
             });
         }
     </script>
+
+    <!-- Instalar App -->
+
+    <div id="pwaInstallBanner" class="pwa-install-banner hidden">
+        <div class="pwa-install-content">
+
+            <img src="./assets/logo-top.png" class="pwa-logo" alt="Novo Visual App">
+
+            <div class="pwa-install-text">
+                <strong class="pwa-title">
+                    <span class="pwa-title-gold">Seu Tempo</span> <br>
+                    <span class="pwa-title-white">Vale Mais</span>
+                </strong>
+
+                <span class="pwa-subtitle">
+                    Agende seus horários com
+                    <strong>rapidez, praticidade e conforto.</strong>
+                </span>
+
+                <div class="pwa-benefits">
+                    <div class="pwa-benefit">
+
+                        <div class="pwa-benefit-icon">⚡</div>
+
+                        <div class="pwa-benefit-text">
+                            Agende em<br>
+                            <strong>segundos</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="pwa-benefit">
+
+                        <div class="pwa-benefit-icon">📅</div>
+
+                        <div class="pwa-benefit-text">
+                            Escolha seu<br>
+                            <strong>horário</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="pwa-benefit">
+
+                        <div class="pwa-benefit-icon">❤</div>
+
+                        <div class="pwa-benefit-text">
+                            Atendimento<br>
+                            <strong>s/ espera</strong>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <button id="btnInstalarPWA" class="pwa-install-btn" type="button">
+
+                <span class="pwa-download-icon">
+                    ⬇
+                </span>
+
+                <span>
+                    INSTALAR AGORA
+                </span>
+
+            </button>
+
+            <button id="btnFecharPWA" class="pwa-install-close" type="button">
+                ✕
+            </button>
+
+        </div>
+    </div>
 
 </body>
 
